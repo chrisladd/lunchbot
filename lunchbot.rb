@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
 require 'pdf-reader'
-require_relative 'fetchMenu'
-require_relative 'renderer'
 require 'json'
 
+require_relative 'fetchMenu'
+require_relative 'renderer'
 require 'date'
 
 class Date

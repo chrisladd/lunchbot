@@ -1,5 +1,6 @@
 # coding: utf-8
 
+require 'pdf-reader'
 require 'forwardable'
 require 'pdf/reader/page_layout'
 
