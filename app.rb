@@ -5,6 +5,7 @@ require 'json'
 post '/gateway' do
   message = params[:text].gsub(params[:trigger_word], '').strip
   args = message.split(' ')
+  respond_message args.join('&&')
   respond_message responseForArguments(args)
 end
 
