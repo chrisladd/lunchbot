@@ -33,7 +33,12 @@ post '/gateway' do
     day = :thursday
   elsif m.include? 'friday'
     day = :friday
+  else 
+    days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+    day = days[Date.today.wday].downcase.to_sym
   end
+
+
 
   s += responseForArguments([station, day])
 
