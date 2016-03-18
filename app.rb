@@ -21,6 +21,13 @@ get '/' do
   "<h1>Yep!</h1>"
 end
 
+get '/stations/:stationId/:day' do |n|
+  # matches "GET /hello/foo" and "GET /hello/bar"
+  # params['name'] is 'foo' or 'bar'
+  # n stores params['name']
+  "Hello #{stationId} - #{day}!"
+end
+
 def respond_message message
   content_type :json
   {:text => message}.to_json
