@@ -17,7 +17,7 @@ post '/gateway' do
     s += "Mmmmmm.... soup.\n\n"
   elsif m.include? 'global'
     station = :global
-    s += "Yes, you do seem like a worldly person... Because. Global.\n\n"
+    s += "Oui capitan.\n\n"
   elsif m.include? 'grill'
     station = :grill
     s += "Get ready for naptime:\n\n"
