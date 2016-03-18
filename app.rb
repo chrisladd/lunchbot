@@ -8,7 +8,7 @@ post '/gateway' do
 
   s = ''
 
-  station = ''
+  station = :all
   day = ''
 
   m = message.downcase 

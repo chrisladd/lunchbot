@@ -159,6 +159,10 @@ def daySymbolForDate(date)
 end
 
 def stringForStationForDay(menu, stationId, day)
+  if stationId && stationId == :all
+  	return stringForAllMenuItemsForDay(menu, day)
+  end
+
   station = menu[:stations][stationId]
   elements = station[:elements][day]
   return stringForElements(elements)
