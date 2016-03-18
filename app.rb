@@ -21,7 +21,7 @@ get '/' do
   "<h1>Yep!</h1>"
 end
 
-get '/soup' do |n|
+get '/soup' do
   # matches "GET /hello/foo" and "GET /hello/bar"
   # params['name'] is 'foo' or 'bar'
   # n stores params['name']
