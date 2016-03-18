@@ -21,11 +21,11 @@ get '/' do
   "<h1>Yep!</h1>"
 end
 
-get '/stations/:stationId/:day' do |n|
+get '/soup' do |n|
   # matches "GET /hello/foo" and "GET /hello/bar"
   # params['name'] is 'foo' or 'bar'
   # n stores params['name']
-  "Hello #{stationId} - #{day}!"
+  stringForStation('soup', 'monday')
 end
 
 def respond_message message

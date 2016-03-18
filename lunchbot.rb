@@ -180,6 +180,29 @@ def stringForAllMenuItemsForDay(menu, day)
   return stringForElements(elements)
 end
 
+def stringForStation(station, day)
+	if station
+		station = station.to_sym
+	end
+
+	if !station
+		station = :soup
+	end
+
+	if day
+		day = day.to_sym
+	end
+
+	if !day
+		day = :monday
+	end
+
+	menu = currentMenu
+	s = stringForStationForDay(menu, station, day)
+
+	return s
+end
+
 begin
   if !ARGV.empty?
     menu = currentMenu
