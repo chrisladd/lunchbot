@@ -5,8 +5,39 @@ require 'json'
 post '/gateway' do
   message = params[:text].gsub(params[:trigger_word], '').strip
   args = message.split(' ')
-  respond_message args.join('&&')
-  respond_message responseForArguments(args)
+
+  s = ''
+
+  station = ''
+  day = ''
+
+  m = message.downcase 
+  if m.include? 'soup'
+    station = :soup
+    s += "Mmmmmm.... soup.\n\n"
+  elsif m.include? 'global'
+    station = :global
+    s += "Yes, you do seem like a worldly person... Because. Global.\n\n"
+  elsif m.include? 'grill'
+    station = :grill
+    s += "Get ready for naptime:\n\n"
+  end
+
+  if m.include? 'monday'
+    day = :monday
+  elsif m.include? 'tuesday'
+    day = :tuesday
+  elsif m.include? 'wednesday'
+    day = :wednesday
+  elsif m.include? 'thursday'
+    day = :thursday
+  elsif m.include? 'friday'
+    day = :friday
+  end
+
+  s += responseForArguments([station, day])
+
+  respond_message s
 end
 
 get '/' do 
