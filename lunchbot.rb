@@ -218,6 +218,7 @@ def responseForArguments(args)
     else
     	days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
       day = days[Date.today.wday].downcase.to_sym
+      
     end
 
     begin
