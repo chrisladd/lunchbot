@@ -137,7 +137,7 @@ def currentMenu
         b[:y] <=> a[:y]
       end
 
-      addElementsToCategoriesIfNecessary(dayElements, categories)
+      addElementsToCategoriesIfNecessary(currentPageDayElements, categories)
     end
 
     dayElements.sort! do |a, b|
@@ -165,6 +165,9 @@ def stringForStationForDay(menu, stationId, day)
 
   station = menu[:stations][stationId]
   elements = station[:elements][day]
+
+  puts elements
+
   return stringForElements(elements)
 end
 
