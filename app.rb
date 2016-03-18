@@ -33,6 +33,10 @@ post '/gateway' do
     day = :thursday
   elsif m.include? 'friday'
     day = :friday
+  elsif m.include? 'saturday'
+    day = :saturday
+  elsif m.include? 'sunday'
+    day = :sunday
   else 
     days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
     day = days[Date.today.wday].downcase.to_sym
