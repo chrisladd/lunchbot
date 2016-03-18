@@ -210,11 +210,11 @@ def responseForArguments(args)
     station = :soup
 
     if args.count > 0
-      station = ARGV[0].to_sym
+      station = args[0].to_sym
     end
 
     if args.count > 1
-      day = ARGV[1].to_sym
+      day = args[1].to_sym
     else
       day = Date.today.dayname.downcase.to_sym
     end
