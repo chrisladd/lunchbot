@@ -181,48 +181,56 @@ def stringForAllMenuItemsForDay(menu, day)
 end
 
 def stringForStation(station, day)
-	if station
-		station = station.to_sym
-	end
+  if station
+    station = station.to_sym
+  end
 
-	if !station
-		station = :soup
-	end
+  if !station
+    station = :soup
+  end
 
-	if day
-		day = day.to_sym
-	end
+  if day
+    day = day.to_sym
+  end
 
-	if !day
-		day = :monday
-	end
+  if !day
+    day = :monday
+  end
 
-	menu = currentMenu
-	s = stringForStationForDay(menu, station, day)
+  menu = currentMenu
+  s = stringForStationForDay(menu, station, day)
 
-	return s
+  return s
 end
 
-begin
-  if !ARGV.empty?
+def responseForArguments(args)
+  s = 'Sorry, didn\'t understand that. Maybe you should go outside?'
+  if !args.empty?
     menu = currentMenu
     station = :soup
 
-    if ARGV.count > 0
+    if args.count > 0
       station = ARGV[0].to_sym
     end
 
-    if ARGV.count > 1
+    if args.count > 1
       day = ARGV[1].to_sym
     else
       day = Date.today.dayname.downcase.to_sym
     end
 
-    s = stringForStationForDay(menu, station, day)
-    puts s
-
-    puts "\n\nIt has been my pleasure to serve you."
+    begin
+    	s = stringForStationForDay(menu, station, day)
+    rescue
+    	s = 'It\'s the weekend, dude. Go home.'
+    end
   end
 
+  return s
+end
+
+begin
+  s = responseForArguments(ARGV)
+  puts s
 rescue
 end
