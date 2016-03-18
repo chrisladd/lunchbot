@@ -9,7 +9,7 @@ require 'date'
 
 class Date
   def dayname
-     DAYNAMES[self.wday]
+    DAYNAMES[self.wday]
   end
 
   def abbr_dayname
@@ -168,35 +168,38 @@ def stringForElements(elements)
   s = ""
   elements.each do |e|
     s += e[:text]
-	s += "\n"
+    s += "\n"
   end
 
   return s
 end
 
 def stringForAllMenuItemsForDay(menu, day)
-	s = ''
-	elements = menu[:days][day]
-	return stringForElements(elements)
+  s = ''
+  elements = menu[:days][day]
+  return stringForElements(elements)
 end
 
-if !ARGV.empty?
-  menu = currentMenu
-  station = :soup
+begin
+  if !ARGV.empty?
+    menu = currentMenu
+    station = :soup
 
-  if ARGV.count > 0
-  	station = ARGV[0].to_sym	
+    if ARGV.count > 0
+      station = ARGV[0].to_sym
+    end
+
+    if ARGV.count > 1
+      day = ARGV[1].to_sym
+    else
+      day = Date.today.dayname.downcase.to_sym
+    end
+
+    s = stringForStationForDay(menu, station, day)
+    puts s
+
+    puts "\n\nIt has been my pleasure to serve you."
   end
 
-  if ARGV.count > 1
-  	day = ARGV[1].to_sym
-  else 
-  	day = Date.today.dayname.downcase.to_sym
-  end
-
-  s = stringForStationForDay(menu, station, day)
-  puts s
-	
-  puts "\n\nIt has been my pleasure to serve you."
+rescue
 end
-
