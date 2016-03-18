@@ -216,9 +216,9 @@ def responseForArguments(args)
     if args.count > 1
       day = args[1].to_sym
     else
-    	days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-      day = days[Date.today.wday].downcase.to_sym
-      
+    days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+      day = days[Date.today.wday - 1].downcase.to_sym
+
     end
 
     begin
