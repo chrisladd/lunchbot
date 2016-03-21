@@ -58,6 +58,7 @@ post '/gateway' do
 end
 
 get '/' do 
+  ensureCurrentMenuExists
   "<h1>Yep!</h1>"
 end
 
