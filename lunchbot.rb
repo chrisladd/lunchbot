@@ -314,7 +314,7 @@ def responseForString(arg_string)
     begin
       s += "Lots for lunch on #{targetDate.to_s.capitalize}:\n\n"
       menu[:stations].each do |stationId, stationHash|
-          s += "#{stationHash[:display]}:\n"
+          s += "*#{stationHash[:display]}*:\n"
           s += stringForStationForDay(menu, stationId, targetDate)
           s += "\n\n"
       end  
