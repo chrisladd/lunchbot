@@ -301,6 +301,7 @@ def responseForString(arg_string)
   if stationIds.count > 0
     stationIds.each do |id|
       begin
+        stationSpecificText += "*#{menu[:stations][id][:display]}*:\n"
         stationSpecificText += stringForStationForDay(menu, id, targetDate)
         stationSpecificText += "\n"
       rescue
