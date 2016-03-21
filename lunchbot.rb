@@ -255,9 +255,9 @@ def stringForStation(station, day)
   return s
 end
 
-def responseForArguments(args)
+def responseForString(arg_string)
   s = ''
-  arg_string = args.join(' ').downcase
+  arg_string = arg_string.downcase
   arg_string.gsub!('grilled cheese', 'grilled_cheese')
   arg_string.gsub!('well soup', 'soup_well')
 
@@ -330,7 +330,7 @@ def responseForArguments(args)
 end
 
 begin
-  s = responseForArguments(ARGV)
+  s = responseForString(ARGV.join(' '))
   puts s
 rescue
 end
