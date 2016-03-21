@@ -38,8 +38,16 @@ post '/gateway' do
   elsif m.include? 'sunday'
     day = :sunday
   else 
+    dayInteger = Date.today.wday
+
+    if m.include? 'tomorrow'
+      dayInteger += 1
+    end
+
+    dayInteger = dayInteger % 7
+
     days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    day = days[Date.today.wday].downcase.to_sym
+    day = days[dayInteger].downcase.to_sym
   end
 
 
