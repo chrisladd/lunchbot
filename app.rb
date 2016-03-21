@@ -5,55 +5,7 @@ require 'json'
 post '/gateway' do
   message = params[:text].gsub(params[:trigger_word], '').strip
   args = message.split(' ')
-
-  s = ''
-
-  station = :all
-  day = ''
-
-  m = message.downcase 
-  if m.include? 'soup'
-    station = :soup
-    s += "Mmmmmm.... soup.\n\n"
-  elsif m.include? 'global'
-    station = :global
-    s += "Oui capitan.\n\n"
-  elsif m.include? 'grill'
-    station = :grill
-    s += "Get ready for naptime:\n\n"
-  end
-
-  if m.include? 'monday'
-    day = :monday
-  elsif m.include? 'tuesday'
-    day = :tuesday
-  elsif m.include? 'wednesday'
-    day = :wednesday
-  elsif m.include? 'thursday'
-    day = :thursday
-  elsif m.include? 'friday'
-    day = :friday
-  elsif m.include? 'saturday'
-    day = :saturday
-  elsif m.include? 'sunday'
-    day = :sunday
-  else 
-    dayInteger = Date.today.wday
-
-    if m.include? 'tomorrow'
-      dayInteger += 1
-    end
-
-    dayInteger = dayInteger % 7
-
-    days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    day = days[dayInteger].downcase.to_sym
-  end
-
-
-
-  s += responseForArguments([station, day])
-
+  s += responseForArguments(args)
   respond_message s
 end
 

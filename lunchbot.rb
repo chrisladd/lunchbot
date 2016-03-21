@@ -117,6 +117,50 @@ def currentMenu
 
   }
 
+  # build up an array of headings
+  headings = {}
+
+  @pageData.each_with_index do |page, idx|
+    prevHeading = nil
+    page[:positions].each do |el|
+      if el[:x] < 95
+        id = el[:text].strip.downcase.gsub(' ', '_').gsub(/\W+/, '')
+
+        if id.include? 'asian'
+          id = 'asian'
+        end
+
+        isValid = true
+        if id =~ /\d/
+          isValid = false
+        end
+
+        if isValid
+          h = {
+            id: id.to_sym,
+            display: el[:text].strip,
+            max_y: el[:y],
+            page: idx,
+            elements: {}
+          }
+
+          headings[h[:id]] = h
+
+          if prevHeading
+            prevHeading[:min_y] = el[:y]
+          end
+
+          prevHeading = h
+        end
+
+      end
+
+      if prevHeading
+        prevHeading[:min_y] = 0
+      end
+    end
+  end
+
   days.each do |day|
     dayElements = []
     dayConfig = firstPage[:keyedPositions][day.to_s]
@@ -124,6 +168,7 @@ def currentMenu
     @pageData.each_with_index do |page, idx|
       currentPageDayElements = []
       page[:positions].each do |element|
+
         if element != dayConfig && elementIntersectsControl(element, dayConfig)
           element[:page] = idx
           element[:day] = day
@@ -137,7 +182,7 @@ def currentMenu
         b[:y] <=> a[:y]
       end
 
-      addElementsToCategoriesIfNecessary(currentPageDayElements, categories)
+      addElementsToCategoriesIfNecessary(currentPageDayElements, headings)
     end
 
     dayElements.sort! do |a, b|
@@ -149,7 +194,7 @@ def currentMenu
   end
 
   return {
-    stations: categories,
+    stations: headings,
     days: elementsByDay
   }
 end
@@ -160,13 +205,13 @@ end
 
 def stringForStationForDay(menu, stationId, day)
   if stationId && stationId == :all
-  	return stringForAllMenuItemsForDay(menu, day)
+    return stringForAllMenuItemsForDay(menu, day)
   end
+
+
 
   station = menu[:stations][stationId]
   elements = station[:elements][day]
-
-  puts elements
 
   return stringForElements(elements)
 end
@@ -211,28 +256,74 @@ def stringForStation(station, day)
 end
 
 def responseForArguments(args)
-  s = 'Sorry, didn\'t understand that. Maybe you should go outside?'
-  if !args.empty?
-    menu = currentMenu
-    station = :soup
+  s = ''
+  arg_string = args.join(' ').downcase
+  arg_string.gsub!('grilled cheese', 'grilled_cheese')
+  arg_string.gsub!('well soup', 'soup_well')
 
-    if args.count > 0
-      station = args[0].to_sym
+  # fake a well request.
+  arg_string.gsub!('soup', 'soup soup_well')
+  arg_string.gsub!('sandwich', 'hero')
+  arg_string.gsub!('healthy soup', 'soup_well')
+  arg_string.strip!
+
+  menu = currentMenu
+
+  stationIds = []
+  if !arg_string.empty?
+    menu[:stations].each do |stationId, stationHash|
+      if arg_string.include? stationId.to_s
+        stationIds << stationId
+      end
+    end  
+  end
+  
+
+  targetDate = nil
+  days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+  days.each do |day|
+    if arg_string.include? day
+      targetDate = day.to_sym
+      break
+    end
+  end
+
+  if !targetDate
+    wDay = Date.today.wday
+    if arg_string.include? 'tomorrow'
+      wDay = (wDay + 1) % 7
     end
 
-    if args.count > 1
-      day = args[1].to_sym
-    else
-      days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-      day = days[Date.today.wday].downcase.to_sym
+    targetDate = days[wDay].to_sym
+  end
 
+  stationSpecificText = ''
+  if stationIds.count > 0
+    stationIds.each do |id|
+      begin
+        stationSpecificText += stringForStationForDay(menu, id, targetDate)
+        stationSpecificText += "\n"
+      rescue
+      end  
     end
+  end
 
+  if stationSpecificText.length > 0
+    s = "I found these on the menu for #{targetDate.to_s.capitalize}:\n\n#{stationSpecificText}"
+  else 
     begin
-    	s = stringForStationForDay(menu, station, day)
+      s += "Lots for lunch on #{targetDate.to_s.capitalize}:\n\n"
+      menu[:stations].each do |stationId, stationHash|
+          s += "#{stationHash[:display]}:\n"
+          s += stringForStationForDay(menu, stationId, targetDate)
+          s += "\n\n"
+      end  
     rescue
-    	s = 'It\'s the weekend, dude. Go home.'
     end
+  end
+  
+  if s.length == 0
+    s += "I'm sorry, I didn't quite get that. Maybe you should go eat outside?"
   end
 
   return s
