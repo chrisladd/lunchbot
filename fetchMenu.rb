@@ -45,7 +45,9 @@ def menuExists?
 end
 
 def ensureCurrentMenuExists
-	if !menuExists?
+	filename = currentMenuFileName
+	
+	if !File.exist? filename
 		cacheCurrentMenu
 	end
 end

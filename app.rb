@@ -16,31 +16,22 @@ post '/slash' do
     response[:response_type] = 'in_channel'
   end
 
-  exists = menuExists?
-  if exists
-    s = responseForString(params[:text])
-    attachments << {
-      text: s
-    }
-    response[:text] = "Here's what I found:"
+  s = responseForString(params[:text])
+  attachments << {
+    text: s
+  }
 
-  else 
-    response[:text] = "Just have to fetch the menu—ask me again in a sec."
-  end
+  response[:text] = "Here's what I found:"
 
   if attachments.count > 0
     response[:attachments] = attachments
   end
 
   send_msg_obj response
-  if !exists
-    cacheCurrentMenu
-  end
-
 end
 
 
-get '/' do 
+get '/' do
   ensureCurrentMenuExists
   "<h1>Yep!</h1>"
 end
@@ -58,8 +49,8 @@ def send_msg_obj obj
 end
 
 def respond_message message
-  
+
   {
-      text: message
-   }.to_json
+    text: message
+  }.to_json
 end
