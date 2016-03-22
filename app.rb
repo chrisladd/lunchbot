@@ -9,10 +9,34 @@ post '/gateway' do
 end
 
 post '/slash' do
+  response = {}
+  msg = params[:text].downcase
+  attachments = []
+  if msg.include? 'everyone'
+    response[:response_type] = 'in_channel'
+  end
 
-  # message = params[:text].gsub(params[:trigger_word], '').strip
-  s = responseForString(params[:text])
-  respond_message s
+  exists = menuExists?
+  if exists
+    s = responseForString(params[:text])
+    attachments << {
+      text: s
+    }
+    response[:text] = "Here's what I found:"
+
+  else 
+    response[:text] = "Just have to fetch the menu—ask me again in a sec."
+  end
+
+  if attachments.count > 0
+    response[:attachments] = attachments
+  end
+
+  send_msg_obj response
+  if !exists
+    cacheCurrentMenu
+  end
+
 end
 
 
@@ -28,8 +52,13 @@ get '/soup' do
   stringForStation('soup', 'monday')
 end
 
-def respond_message message
+def send_msg_obj obj
   content_type :json
+  obj.to_json
+end
+
+def respond_message message
+  
   {
       text: message
    }.to_json
