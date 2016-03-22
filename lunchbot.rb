@@ -367,7 +367,7 @@ def responseForString(arg_string)
 end
 
 begin
-  s = responseForString(ARGV.join(' '))
-  puts s
+  obj = responseForString(ARGV.join(' '))
+  puts JSON.pretty_generate(obj)
 rescue
 end
