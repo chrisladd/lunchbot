@@ -4,8 +4,6 @@ require 'httparty'
 require 'nokogiri'
 require 'date'
 
-@menuLinks = {}
-
 def linksFromURL(url)
 	html = HTTParty.get(url).body
 	doc = Nokogiri::HTML(html)
@@ -37,20 +35,13 @@ def cacheCurrentMenu
 	menuLink = currentPDFLink
 	pdf = HTTParty.get(menuLink).body
 	filename = currentMenuFileName
-	@menuLinks[filename] = menuLink
-
+	
 	File.open(filename, 'w') { |f| f.write(pdf) }
 end
 
 def menuExists?
 	filename = currentMenuFileName
 	return File.exist? filename
-end
-
-def currentMenuLink
-	filename = currentMenuFileName
-	link = @menuLinks[filename]
-	return link
 end
 
 def ensureCurrentMenuExists
