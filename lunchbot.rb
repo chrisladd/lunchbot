@@ -203,22 +203,45 @@ def daySymbolForDate(date)
 
 end
 
-def stringForStationForDay(menu, stationId, day)
-  if stationId && stationId == :all
-    return stringForAllMenuItemsForDay(menu, day)
+def elementPassesFilter(element, dietaryFilter)
+
+  if dietaryFilter.length <= 0
+    return true
   end
 
+  if dietaryFilter == 'vegan' and element[:text].end_with? 'VG'
+    puts element[:text]
+    return true
+  end
 
+  # there's prolly a smarter way to get items ending in VG or V with a regex or something but i do not know it
+  if dietaryFilter == 'vegetarian' and (element[:text].end_with? 'VG' or element[:text].end_with? 'V')
+    return true
+  end
+
+  return false
+
+end
+
+def stringForStationForDay(menu, stationId, day, dietaryFilter)
+  if stationId && stationId == :all
+    return stringForAllMenuItemsForDay(menu, day, dietaryFilter)
+  end
 
   station = menu[:stations][stationId]
   elements = station[:elements][day]
 
-  return stringForElements(elements)
+  return stringForElements(elements, dietaryFilter)
 end
 
-def stringForElements(elements)
+def stringForElements(elements, dietaryFilter)
+
   s = ""
   elements.each do |e|
+    if dietaryFilter.length > 0 && !elementPassesFilter(e, dietaryFilter)
+      next
+    end
+
     s += e[:text]
     s += "\n"
   end
@@ -226,10 +249,10 @@ def stringForElements(elements)
   return s
 end
 
-def stringForAllMenuItemsForDay(menu, day)
+def stringForAllMenuItemsForDay(menu, day, dietaryFilter)
   s = ''
   elements = menu[:days][day]
-  return stringForElements(elements)
+  return stringForElements(elements, dietaryFilter)
 end
 
 def stringForStation(station, day)
@@ -250,7 +273,7 @@ def stringForStation(station, day)
   end
 
   menu = currentMenu
-  s = stringForStationForDay(menu, station, day)
+  s = stringForStationForDay(menu, station, day, dietaryFilter)
 
   return s
 end
@@ -277,7 +300,16 @@ def responseForString(arg_string)
       end
     end  
   end
-  
+
+  # Kevin adding vegan/vegetarian filters
+  dietaryFilter = ''
+  if arg_string.include? 'vegan'
+    dietaryFilter = 'vegan'
+  end
+
+  if arg_string.include? 'vegetarian'
+    dietaryFilter = 'vegetarian'
+  end
 
   targetDate = nil
   days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
@@ -302,7 +334,7 @@ def responseForString(arg_string)
     stationIds.each do |id|
       begin
         stationSpecificText += "*#{menu[:stations][id][:display]}*:\n"
-        stationSpecificText += stringForStationForDay(menu, id, targetDate)
+        stationSpecificText += stringForStationForDay(menu, id, targetDate, dietaryFilter)
         stationSpecificText += "\n"
       rescue
       end  
@@ -318,7 +350,7 @@ def responseForString(arg_string)
       headingText = "Lots for lunch on #{targetDate.to_s.capitalize}:\n\n"
       menu[:stations].each do |stationId, stationHash|
           s += "*#{stationHash[:display]}*:\n"
-          s += stringForStationForDay(menu, stationId, targetDate)
+          s += stringForStationForDay(menu, stationId, targetDate, dietaryFilter)
           s += "\n\n"
       end  
     rescue
