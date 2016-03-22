@@ -10,7 +10,16 @@ end
 
 post '/slash' do
   response = {}
-  msg = params[:text].downcase
+  msg = nil
+
+  if params[:text]
+    msg = params[:text].downcase.strip
+  end
+
+  if !msg || msg.length == 0
+    msg = 'all'
+  end
+  
   attachments = []
   if msg.include? 'everyone'
     response[:response_type] = 'in_channel'
