@@ -8,6 +8,14 @@ post '/gateway' do
   respond_message s
 end
 
+post '/slash' do
+  
+  # message = params[:text].gsub(params[:trigger_word], '').strip
+  # s = responseForString(message)
+  respond_message params.to_json
+end
+
+
 get '/' do 
   ensureCurrentMenuExists
   "<h1>Yep!</h1>"
