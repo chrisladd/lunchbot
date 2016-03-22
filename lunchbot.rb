@@ -210,7 +210,6 @@ def elementPassesFilter(element, dietaryFilter)
   end
 
   if dietaryFilter == 'vegan' and element[:text].end_with? 'VG'
-    puts element[:text]
     return true
   end
 
