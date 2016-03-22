@@ -309,8 +309,9 @@ def responseForString(arg_string)
     end
   end
 
+  headingText = ''
   if stationSpecificText.length > 0
-    s = "I found these on the menu for #{targetDate.to_s.capitalize}:\n\n#{stationSpecificText}"
+    headingText = "I found these on the menu for #{targetDate.to_s.capitalize}:\n\n#{stationSpecificText}"
   else 
     begin
       s += "Lots for lunch on #{targetDate.to_s.capitalize}:\n\n"
@@ -324,10 +325,13 @@ def responseForString(arg_string)
   end
   
   if s.length == 0
-    s += "I'm sorry, I didn't quite get that. Maybe you should go eat outside?"
+    headingText = "I'm sorry, I didn't quite get that. Maybe you should go eat outside?"
   end
 
-  return s
+  return {
+  	heading: headingText,
+  	body: s
+  }
 end
 
 begin

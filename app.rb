@@ -4,8 +4,8 @@ require 'json'
 
 post '/gateway' do
   message = params[:text].gsub(params[:trigger_word], '').strip
-  s = responseForString(message)
-  respond_message s
+  r = responseForString(message)
+  respond_message r[:body]
 end
 
 post '/slash' do
@@ -16,12 +16,15 @@ post '/slash' do
     response[:response_type] = 'in_channel'
   end
 
-  s = responseForString(params[:text])
-  attachments << {
-    text: s
-  }
+  b = responseForString(params[:text])
+  
+  if b[:body]
+    attachments << {
+      text: b[:body]
+    }  
+  end
 
-  response[:text] = "Here's what I found:"
+  response[:text] = b[:text]
 
   if attachments.count > 0
     response[:attachments] = attachments
