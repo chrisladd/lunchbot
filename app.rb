@@ -25,7 +25,7 @@ post '/slash' do
     response[:response_type] = 'in_channel'
   end
 
-  b = responseForString(params[:text])
+  b = responseForString(msg)
   
   if b[:body]
     attachments << {
