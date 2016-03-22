@@ -315,7 +315,7 @@ def responseForString(arg_string)
     s = stationSpecificText
   else 
     begin
-      s += "Lots for lunch on #{targetDate.to_s.capitalize}:\n\n"
+      headingText = "Lots for lunch on #{targetDate.to_s.capitalize}:\n\n"
       menu[:stations].each do |stationId, stationHash|
           s += "*#{stationHash[:display]}*:\n"
           s += stringForStationForDay(menu, stationId, targetDate)
