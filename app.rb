@@ -9,10 +9,10 @@ post '/gateway' do
 end
 
 post '/slash' do
-  
+
   # message = params[:text].gsub(params[:trigger_word], '').strip
-  # s = responseForString(message)
-  respond_message params.to_json
+  s = responseForString(params[:text])
+  respond_message s
 end
 
 
@@ -30,5 +30,7 @@ end
 
 def respond_message message
   content_type :json
-  {:text => message}.to_json
+  {
+      text: message
+   }.to_json
 end
