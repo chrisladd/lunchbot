@@ -24,7 +24,7 @@ post '/slash' do
     }  
   end
 
-  response[:text] = b[:text]
+  response[:text] = b[:heading]
 
   if attachments.count > 0
     response[:attachments] = attachments
