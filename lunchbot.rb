@@ -311,7 +311,8 @@ def responseForString(arg_string)
 
   headingText = ''
   if stationSpecificText.length > 0
-    headingText = "I found these on the menu for #{targetDate.to_s.capitalize}:\n\n#{stationSpecificText}"
+    headingText = "I found these on the menu for #{targetDate.to_s.capitalize}:"
+    s = stationSpecificText
   else 
     begin
       s += "Lots for lunch on #{targetDate.to_s.capitalize}:\n\n"
