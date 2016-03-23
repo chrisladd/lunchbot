@@ -99,9 +99,13 @@ def elementsByCombiningAdjacentElements els
     elementIsValid = true
 
     if prevElement && prevElement[:y] - e[:y] < threshold
-      t = prevElement[:text].gsub("\n", " ").strip + " " + e[:text].gsub("\n", " ").strip
-      prevElement[:text] = t
-      elementIsValid = false
+      elText = e[:text].gsub("\n", " ").strip
+      if !prevElement[:text].include? elText
+        t = prevElement[:text].gsub("\n", " ").strip + " " + elText
+        prevElement[:text] = t
+      end
+
+      elementIsValid = false  
     end
 
     if elementIsValid

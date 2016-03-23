@@ -9,8 +9,6 @@ post '/gateway' do
 end
 
 post '/slash' do
-  puts params
-  
   response = {}
   msg = nil
 

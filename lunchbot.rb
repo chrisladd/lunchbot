@@ -72,9 +72,21 @@ def stringWithSubstitutedTokens(arg_string)
 end
 
 def responseForString(arg_string)
+
+
   s = ''
   arg_string = stringWithSubstitutedTokens(arg_string)
+  
+  if arg_string.include? 'pdf'
+    return {
+      heading: "OK, no hard feelings. Here's a link to the full menu:",
+      body: currentPDFLink
+    }  
+  end
+
   menu = currentMenu
+
+
 
   stationIds = []
   if !arg_string.empty?
@@ -153,6 +165,7 @@ end
 
 begin
   obj = responseForString(ARGV.join(' '))
-  puts JSON.pretty_generate(obj)
+  puts obj[:heading]
+  puts obj[:body]
 rescue
 end
