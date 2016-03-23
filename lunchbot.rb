@@ -40,7 +40,7 @@ def stringForElement(element)
   s = element[:text]
   s.gsub!(/V$/, ' (vegetarian)')
   s.gsub!(/VG$/, ' (vegan)')
-  s = "  #{s}"
+  s = "     #{s}"
   return s
 end
 
