@@ -9,9 +9,8 @@ post '/gateway' do
 end
 
 post '/slash' do
-  respond_message params.to_json
-  return
-
+  puts params
+  
   response = {}
   msg = nil
 
