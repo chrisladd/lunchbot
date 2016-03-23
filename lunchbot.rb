@@ -36,6 +36,12 @@ def stringForStationForDay(menu, stationId, day, dietaryFilter)
   return stringForElements(elements, dietaryFilter)
 end
 
+def stringForElement(element)
+  s = element[:text]
+  s.gsub!(/V$/, ' (vegetarian)')
+  s.gsub!(/VG$/, ' (vegan)')
+  return s
+end
 
 def stringForElements(elements, dietaryFilter)
   s = ""
@@ -44,7 +50,7 @@ def stringForElements(elements, dietaryFilter)
       next
     end
 
-    s += e[:text]
+    s += stringForElement(e)
     s += "\n"
   end
 
