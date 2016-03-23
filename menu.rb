@@ -46,6 +46,74 @@ def addElementsToCategoriesIfNecessary(elements, categories)
 
 end
 
+def headingsFromPage(page, idx)
+  headings = {}
+  prevHeading = nil
+  page[:positions].each do |el|
+    if el[:x] < 95
+      id = el[:text].strip.downcase.gsub(' ', '_').gsub(/\W+/, '')
+
+      if id.include? 'asian'
+        id = 'asian'
+      end
+
+      isValid = true
+      if id =~ /\d/
+        isValid = false
+      end
+
+      if isValid
+        h = {
+          id: id.to_sym,
+          display: el[:text].strip,
+          max_y: el[:y],
+          page: idx,
+          elements: {}
+        }
+
+        headings[h[:id]] = h
+
+        if prevHeading
+          prevHeading[:min_y] = el[:y]
+        end
+
+        prevHeading = h
+      end
+
+    end
+
+    if prevHeading
+      prevHeading[:min_y] = 0
+    end
+  end
+
+  headings
+end
+
+def elementsByCombiningAdjacentElements els
+  combinedElements = []
+  prevElement = nil
+  prevY = -1000
+  threshold = 13
+  els.each do |e|
+    elementIsValid = true
+
+    if prevElement && prevElement[:y] - e[:y] < threshold
+      t = prevElement[:text].gsub("\n", " ").strip + " " + e[:text].gsub("\n", " ").strip
+      prevElement[:text] = t
+      elementIsValid = false
+    end
+
+    if elementIsValid
+      prevElement = e
+      combinedElements << e
+    end
+
+    prevY = e[:y]
+  end
+
+  combinedElements
+end
 
 def currentMenu
   ensureCurrentMenuExists
@@ -66,52 +134,13 @@ def currentMenu
   firstPage = @pageData[0]
   days = [:monday, :tuesday, :wednesday, :thursday, :friday]
 
-  elementsByDay = {
-
-  }
+  elementsByDay = {}
 
   # build up an array of headings
   headings = {}
 
   @pageData.each_with_index do |page, idx|
-    prevHeading = nil
-    page[:positions].each do |el|
-      if el[:x] < 95
-        id = el[:text].strip.downcase.gsub(' ', '_').gsub(/\W+/, '')
-
-        if id.include? 'asian'
-          id = 'asian'
-        end
-
-        isValid = true
-        if id =~ /\d/
-          isValid = false
-        end
-
-        if isValid
-          h = {
-            id: id.to_sym,
-            display: el[:text].strip,
-            max_y: el[:y],
-            page: idx,
-            elements: {}
-          }
-
-          headings[h[:id]] = h
-
-          if prevHeading
-            prevHeading[:min_y] = el[:y]
-          end
-
-          prevHeading = h
-        end
-
-      end
-
-      if prevHeading
-        prevHeading[:min_y] = 0
-      end
-    end
+    headings.merge! headingsFromPage(page, idx)
   end
 
   days.each do |day|
@@ -134,6 +163,9 @@ def currentMenu
       currentPageDayElements.sort! do |a, b|
         b[:y] <=> a[:y]
       end
+
+      # combine and adjacent ones
+      currentPageDayElements = elementsByCombiningAdjacentElements(currentPageDayElements)
 
       addElementsToCategoriesIfNecessary(currentPageDayElements, headings)
     end
