@@ -135,7 +135,7 @@ def responseForString(arg_string)
   if stationIds.count > 0
     stationIds.each do |id|
       begin
-        stationSpecificText += "#{menu[:stations][id][:display]}:\n―――\n"
+        stationSpecificText += "#{menu[:stations][id][:display]}:\n―\n"
         stationSpecificText += stringForStationForDay(menu, id, targetDate, dietaryFilter)
         stationSpecificText += "\n"
       rescue
@@ -151,7 +151,7 @@ def responseForString(arg_string)
     begin
       headingText = "Lots for lunch on #{targetDate.to_s.capitalize}:\n\n"
       menu[:stations].each do |stationId, stationHash|
-          s += "*#{stationHash[:display]}*:\n"
+          s += "#{stationHash[:display]}:\n―\n"
           s += stringForStationForDay(menu, stationId, targetDate, dietaryFilter)
           s += "\n\n"
       end  
