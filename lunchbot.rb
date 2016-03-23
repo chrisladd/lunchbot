@@ -40,6 +40,7 @@ def stringForElement(element)
   s = element[:text]
   s.gsub!(/V$/, ' (vegetarian)')
   s.gsub!(/VG$/, ' (vegan)')
+  s = "  #{s}"
   return s
 end
 
@@ -135,7 +136,7 @@ def responseForString(arg_string)
   if stationIds.count > 0
     stationIds.each do |id|
       begin
-        stationSpecificText += "#{menu[:stations][id][:display]}:\n―\n"
+        stationSpecificText += "#{menu[:stations][id][:display]}:"
         stationSpecificText += stringForStationForDay(menu, id, targetDate, dietaryFilter)
         stationSpecificText += "\n"
       rescue
@@ -151,7 +152,7 @@ def responseForString(arg_string)
     begin
       headingText = "Lots for lunch on #{targetDate.to_s.capitalize}:\n\n"
       menu[:stations].each do |stationId, stationHash|
-          s += "#{stationHash[:display]}:\n―\n"
+          s += "#{stationHash[:display]}:\n"
           s += stringForStationForDay(menu, stationId, targetDate, dietaryFilter)
           s += "\n\n"
       end  
