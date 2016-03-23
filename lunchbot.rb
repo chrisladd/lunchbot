@@ -91,7 +91,22 @@ def responseForString(arg_string)
     }  
   end
 
+
   menu = currentMenu
+
+  # if users are asking about stations...
+  if arg_string.include?('stations') || arg_string.include?('help')
+    menu[:stations].each do |stationId, stationHash|
+      s += "#{stationId}\n"
+    end
+
+    return {
+      heading: "Lunchbot is wise. Here are the stations you can ask me about, or you can say \"PDF\", and let your fingers do the scraping.", 
+      body: s
+    }
+  end
+
+  
 
 
 
@@ -136,7 +151,7 @@ def responseForString(arg_string)
   if stationIds.count > 0
     stationIds.each do |id|
       begin
-        stationSpecificText += "#{menu[:stations][id][:display]}:"
+        stationSpecificText += "#{menu[:stations][id][:display]}:\n"
         stationSpecificText += stringForStationForDay(menu, id, targetDate, dietaryFilter)
         stationSpecificText += "\n"
       rescue
