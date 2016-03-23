@@ -91,6 +91,11 @@ def responseForString(arg_string)
     }  
   end
 
+  if arg_string.include? 'calories'
+    return {
+      heading: "That all depends on how generous the restaurant associate is with their portion size, doesn't it?"
+    }  
+  end
 
   menu = currentMenu
 
