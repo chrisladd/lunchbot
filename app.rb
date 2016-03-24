@@ -2,12 +2,6 @@ require 'sinatra'
 require 'httparty'
 require 'json'
 
-$KCODE = 'u' if RUBY_VERSION < '1.9'
-
-before do
-  content_type :json, 'charset' => 'utf-8'
-end
-
 post '/gateway' do
   message = params[:text].gsub(params[:trigger_word], '').strip
   r = responseForString(message)
@@ -79,6 +73,6 @@ end
 def respond_message message
 
   {
-    text: message
+    text: message.force_encoding("utf-8")
   }.to_json
 end
