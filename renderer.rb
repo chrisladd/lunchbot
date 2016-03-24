@@ -67,7 +67,7 @@ module PDF
         params.each do |arg|
           if arg.is_a?(String)
             totalWidth += internal_show_text(arg)
-            string += arg
+            string += arg.encode("utf-8", "binary", :undef => :replace)
           else
             @state.process_glyph_displacement(0, arg, false)
           end
