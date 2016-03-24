@@ -25,20 +25,30 @@ post '/slash' do
     response[:response_type] = 'in_channel'
   end
 
-  b = responseForString(msg)
+  begin
+    b = responseForString(msg)
   
-  if b[:body]
-    attachments << {
-      text: b[:body]
-    }  
+    if b[:body]
+      attachments << {
+        text: b[:body]
+      }  
+    end
+  
+    if b[:heading]
+      response[:text] = b[:heading]  
+    end
+  
+    if attachments.count > 0
+      response[:attachments] = attachments
+    end
+
+  rescue
+    response = {
+      text: "Sorry, Lunchbot is currently encountering a food coma. Try again soon."
+    }
   end
 
-  response[:text] = b[:heading]
-
-  if attachments.count > 0
-    response[:attachments] = attachments
-  end
-
+  
   send_msg_obj response
 end
 
