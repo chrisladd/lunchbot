@@ -180,9 +180,10 @@ def responseForString(arg_string)
     headingText = "I'm sorry, I didn't quite get that. Maybe you should go eat outside?"
   end
 
-  w = getWeather('New York', 'NY')
-  condition = w['query']['results']['channel']['item']['condition']
-  headingText = "It’s #{condition['temp'].to_s} and #{condition['text'].downcase}. Maybe you should go outside?\nAnyway.\n" + headingText
+  condition = getCurrentWeatherConditions('New York', 'NY')
+  if condition && condition['temp'].to_i > 50 && condition['text'].downcase.include?('sun')
+    headingText = "It’s #{condition['temp'].to_s} and #{condition['text'].downcase}. Maybe you should go outside?\nAnyway.\n" + headingText    
+  end
 
   return {
   	heading: headingText,
