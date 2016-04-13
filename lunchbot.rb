@@ -4,6 +4,7 @@ require 'pdf-reader'
 require 'json'
 
 require_relative 'fetchMenu'
+require_relative 'weather'
 require_relative 'menu'
 require_relative 'renderer'
 require 'date'
@@ -79,8 +80,6 @@ def stringWithSubstitutedTokens(arg_string)
 end
 
 def responseForString(arg_string)
-
-
   s = ''
   arg_string = stringWithSubstitutedTokens(arg_string)
   
@@ -110,9 +109,6 @@ def responseForString(arg_string)
       body: s
     }
   end
-
-  
-
 
 
   stationIds = []
@@ -182,6 +178,11 @@ def responseForString(arg_string)
   
   if s.length == 0
     headingText = "I'm sorry, I didn't quite get that. Maybe you should go eat outside?"
+  end
+
+  condition = getCurrentWeatherConditions('New York', 'NY')
+  if condition && condition['temp'].to_i > 50 && condition['text'].downcase.include?('sun')
+    headingText = "It’s #{condition['temp'].to_s} and #{condition['text'].downcase}. Maybe you should go outside?\nAnyway.\n" + headingText    
   end
 
   return {
